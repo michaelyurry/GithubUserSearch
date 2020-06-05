@@ -1,9 +1,13 @@
 package com.yurry.githubusersearch.presenter;
 
+import com.google.gson.Gson;
+import com.google.gson.JsonObject;
 import com.yurry.githubusersearch.model.GithubUserSearchResponse;
 import com.yurry.githubusersearch.rest.GithubRestApi;
 import com.yurry.githubusersearch.rest.GithubRestClient;
 import com.yurry.githubusersearch.view.GithubUserView;
+
+import java.io.IOException;
 
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -39,6 +43,8 @@ public class GithubUserPresenterImpl implements GithubUserPresenter {
                     } else {
                         githubUserView.makeFailedToast();
                     }
+                } else {
+                    handleResponseError(response);
                 }
             }
 
@@ -66,6 +72,9 @@ public class GithubUserPresenterImpl implements GithubUserPresenter {
                     } else {
                         githubUserView.makeFailedToast();
                     }
+                } else {
+                    handleResponseError(response);
+
                 }
             }
 
@@ -75,5 +84,24 @@ public class GithubUserPresenterImpl implements GithubUserPresenter {
                 githubUserView.makeFailedToast();
             }
         });
+    }
+
+    private void handleResponseError(Response<GithubUserSearchResponse> response){
+        githubUserView.hideLoading();
+        Gson gson = new Gson();
+        try {
+            if (response.errorBody() != null) {
+                JsonObject jsonObject = gson.fromJson(response.errorBody().string(), JsonObject.class);
+                if(jsonObject.get("message").isJsonPrimitive() && jsonObject.get("message").getAsJsonPrimitive().isString()){
+                    githubUserView.makeToast(jsonObject.get("message").getAsString());
+                } else {
+                    githubUserView.makeFailedToast();
+                }
+            } else {
+                githubUserView.makeFailedToast();
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 }

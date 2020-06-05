@@ -117,6 +117,11 @@ public class MainActivity extends AppCompatActivity implements GithubUserView {
     }
 
     @Override
+    public void makeToast(String s) {
+        Toast.makeText(this, s, Toast.LENGTH_SHORT).show();
+    }
+
+    @Override
     public void setGithubUserList(List<GithubUser> githubUserList) {
         adapter.setGithubUserList(githubUserList);
         scrollListener.resetState();
