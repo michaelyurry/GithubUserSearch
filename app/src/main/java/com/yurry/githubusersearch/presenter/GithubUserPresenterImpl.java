@@ -15,6 +15,7 @@ import retrofit2.Response;
 
 public class GithubUserPresenterImpl implements GithubUserPresenter {
     public static int PER_PAGE = 30;
+    private static String MESSAGE_KEY = "message";
 
     private GithubUserView githubUserView;
     private GithubRestApi api;
@@ -92,8 +93,8 @@ public class GithubUserPresenterImpl implements GithubUserPresenter {
         try {
             if (response.errorBody() != null) {
                 JsonObject jsonObject = gson.fromJson(response.errorBody().string(), JsonObject.class);
-                if(jsonObject.get("message").isJsonPrimitive() && jsonObject.get("message").getAsJsonPrimitive().isString()){
-                    githubUserView.makeToast(jsonObject.get("message").getAsString());
+                if(jsonObject.get(MESSAGE_KEY).isJsonPrimitive() && jsonObject.get(MESSAGE_KEY).getAsJsonPrimitive().isString()){
+                    githubUserView.makeToast(jsonObject.get(MESSAGE_KEY).getAsString());
                 } else {
                     githubUserView.makeFailedToast();
                 }
