@@ -84,6 +84,7 @@ public class MainActivity extends AppCompatActivity implements GithubUserView {
             @Override
             public void onLoadMore(int page, int totalItemsCount, RecyclerView view) {
                 if (totalItemsCount >= GithubUserPresenterImpl.PER_PAGE){
+                    loadingView.setVisibility(View.VISIBLE);
                     presenter.onSearchNextPage(page);
                 } else {
                     makeLastItemToast();

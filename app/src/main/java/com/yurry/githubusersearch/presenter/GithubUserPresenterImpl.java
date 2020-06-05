@@ -57,6 +57,7 @@ public class GithubUserPresenterImpl implements GithubUserPresenter {
             @Override
             public void onResponse(Call<GithubUserSearchResponse> call, Response<GithubUserSearchResponse> response) {
                 if (response.isSuccessful()){
+                    githubUserView.hideLoading();
                     if (response.body() != null) {
                         githubUserView.addGithubUserList(response.body().getItems());
                         if (response.body().getItems().size() == 0){
@@ -70,6 +71,7 @@ public class GithubUserPresenterImpl implements GithubUserPresenter {
 
             @Override
             public void onFailure(Call<GithubUserSearchResponse> call, Throwable t) {
+                githubUserView.hideLoading();
                 githubUserView.makeFailedToast();
             }
         });
